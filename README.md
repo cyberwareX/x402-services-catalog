@@ -24,8 +24,8 @@ Give your agent reliable eyes on the live web - the one thing an LLM can't do na
 **Use when:** Reach for it when your agent must read a page it was handed, scrape live data, screenshot a site for a report, or turn a URL into a PDF - any time the answer lives on a website the model can't see.
 
 - Base URL: `https://web.cyberwarex.com`
-- `GET /fetch` ($0.002 USDC) - Render a page to markdown/text/html
-- `GET /extract` ($0.002 USDC) - Extract elements by CSS selector
+- `GET /fetch` ($0.001 USDC) - Render a page to markdown/text/html
+- `GET /extract` ($0.001 USDC) - Extract elements by CSS selector
 - `GET /screenshot` ($0.005 USDC) - Full-page PNG screenshot
 - `GET /pdf` ($0.005 USDC) - Render a page to PDF
 - `GET /ocr` ($0.005 USDC) - OCR: extract text from an image URL (screenshot/scan/receipt/photo) via Tesseract; SSRF-guarded, no charge on empty
@@ -40,15 +40,15 @@ Answer 'is this token safe to trade?' before committing funds. Deterministic, ev
 **Use when:** Call it before any swap, token approval, or 'should I buy this' decision - it catches honeypots and hidden sell-taxes so your agent never buys a coin it can't sell.
 
 - Base URL: `https://oracle.cyberwarex.com`
-- `GET /contract` ($0.02 USDC) - Contract powers + ownership analysis
-- `GET /honeypot` ($0.04 USDC) - Live buy/sell honeypot simulation
-- `GET /token` ($0.06 USDC) - Full safety report (all of the above)
-- `POST /screen` ($0.15 USDC) - Batch screen up to 25 tokens in one POST
-- `GET /risk/explain` ($0.01 USDC) - Agent verdict: ALLOW/LIMIT/RECHECK/BLOCK + reason codes
-- `POST /v1/risk/check` ($0.03 USDC) - Full multi-dimensional risk decomposition for agents
-- `GET /verdict` ($0.02 USDC) - One-call launch screening: GREEN/CAUTION/BLOCK (allow/review/reject) + reasons, incl. deployer prior-scams & code-rugged-before. For launchpads: auto-reject rugs before listing. Cache-first (~$0 on repeats)
-- `GET /deployer` ($0.01 USDC) - Deployer-wallet reputation from our verdict ledger: prior proven honeypot/scam tokens (dead launches excluded)
-- `GET /template` ($0.01 USDC) - Contract-template reputation: honeypot/scam siblings sharing this bytecode fingerprint (fuzzy-matched)
+- `GET /contract` ($0.008 USDC) - Contract powers + ownership analysis
+- `GET /honeypot` ($0.005 USDC) - Live buy/sell honeypot simulation
+- `GET /token` ($0.012 USDC) - Full safety report (all of the above)
+- `POST /screen` ($0.03 USDC) - Batch screen up to 25 tokens in one POST
+- `GET /risk/explain` ($0.005 USDC) - Agent verdict: ALLOW/LIMIT/RECHECK/BLOCK + reason codes
+- `POST /v1/risk/check` ($0.01 USDC) - Full multi-dimensional risk decomposition for agents
+- `GET /verdict` ($0.01 USDC) - One-call launch screening: GREEN/CAUTION/BLOCK (allow/review/reject) + reasons, incl. deployer prior-scams & code-rugged-before. For launchpads: auto-reject rugs before listing. Cache-first (~$0 on repeats)
+- `GET /deployer` ($0.005 USDC) - Deployer-wallet reputation from our verdict ledger: prior proven honeypot/scam tokens (dead launches excluded)
+- `GET /template` ($0.005 USDC) - Contract-template reputation: honeypot/scam siblings sharing this bytecode fingerprint (fuzzy-matched)
 - `GET /v1/identity/wallet` ($0.02 USDC) - Who is behind a wallet: age, ENS, linked X account, deployer history
 - `GET /v1/identity/x` ($0.01 USDC) - X/Twitter account profile: age, followers, verified status, trust signals
 - `GET /v1/identity/token` ($0.05 USDC) - Who is behind a token: market, socials, creator wallet, impersonation/rug signals

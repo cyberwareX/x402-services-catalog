@@ -31,7 +31,7 @@
     "auth": "none",
     "note": "One hosted MCP endpoint for the whole suite: initialize / tools/list / tools/call. An unpaid tools/call returns that tool's x402 invoice; pay and retry with x_payment."
   },
-  "generated_at": 1792326505,
+  "generated_at": 1792330228,
   "service_count": 9,
   "services": [
     {
@@ -56,13 +56,17 @@
         {
           "path": "/fetch",
           "method": "GET",
-          "price_usdc": 0.002,
-          "desc": "Render a page to markdown/text/html"
+          "price_usdc": 0.001,
+          "desc": "Render a page to markdown/text/html",
+          "example": {
+            "url": "https://example.com",
+            "format": "markdown"
+          }
         },
         {
           "path": "/extract",
           "method": "GET",
-          "price_usdc": 0.002,
+          "price_usdc": 0.001,
           "desc": "Extract elements by CSS selector"
         },
         {
@@ -115,55 +119,59 @@
         {
           "path": "/contract",
           "method": "GET",
-          "price_usdc": 0.02,
+          "price_usdc": 0.008,
           "desc": "Contract powers + ownership analysis"
         },
         {
           "path": "/honeypot",
           "method": "GET",
-          "price_usdc": 0.04,
+          "price_usdc": 0.005,
           "desc": "Live buy/sell honeypot simulation"
         },
         {
           "path": "/token",
           "method": "GET",
-          "price_usdc": 0.06,
-          "desc": "Full safety report (all of the above)"
+          "price_usdc": 0.012,
+          "desc": "Full safety report (all of the above)",
+          "example": {
+            "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "chain": "base"
+          }
         },
         {
           "path": "/screen",
           "method": "POST",
-          "price_usdc": 0.15,
+          "price_usdc": 0.03,
           "desc": "Batch screen up to 25 tokens in one POST"
         },
         {
           "path": "/risk/explain",
           "method": "GET",
-          "price_usdc": 0.01,
+          "price_usdc": 0.005,
           "desc": "Agent verdict: ALLOW/LIMIT/RECHECK/BLOCK + reason codes"
         },
         {
           "path": "/v1/risk/check",
           "method": "POST",
-          "price_usdc": 0.03,
+          "price_usdc": 0.01,
           "desc": "Full multi-dimensional risk decomposition for agents"
         },
         {
           "path": "/verdict",
           "method": "GET",
-          "price_usdc": 0.02,
+          "price_usdc": 0.01,
           "desc": "One-call launch screening: GREEN/CAUTION/BLOCK (allow/review/reject) + reasons, incl. deployer prior-scams & code-rugged-before. For launchpads: auto-reject rugs before listing. Cache-first (~$0 on repeats)"
         },
         {
           "path": "/deployer",
           "method": "GET",
-          "price_usdc": 0.01,
+          "price_usdc": 0.005,
           "desc": "Deployer-wallet reputation from our verdict ledger: prior proven honeypot/scam tokens (dead launches excluded)"
         },
         {
           "path": "/template",
           "method": "GET",
-          "price_usdc": 0.01,
+          "price_usdc": 0.005,
           "desc": "Contract-template reputation: honeypot/scam siblings sharing this bytecode fingerprint (fuzzy-matched)"
         },
         {
@@ -224,7 +232,11 @@
           "path": "/v1/holders/verdict",
           "method": "GET",
           "price_usdc": 0.03,
-          "desc": "Crowd Check instant verdict for trading bots ($0.03): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready."
+          "desc": "Crowd Check instant verdict for trading bots ($0.03): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready.",
+          "example": {
+            "chain": "base",
+            "token": "0xTOKEN"
+          }
         },
         {
           "path": "/v1/paper/backtest",
@@ -305,7 +317,11 @@
           "path": "/wallet",
           "method": "GET",
           "price_usdc": 0.003,
-          "desc": "Wallet snapshot: native + USDC balance, tx count, contract-or-EOA, USD values"
+          "desc": "Wallet snapshot: native + USDC balance, tx count, contract-or-EOA, USD values",
+          "example": {
+            "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+            "chain": "base"
+          }
         },
         {
           "path": "/token",
@@ -379,7 +395,11 @@
           "path": "/search",
           "method": "GET",
           "price_usdc": 0.003,
-          "desc": "Web search - q, category (general|news|images), lang, max_results<=10"
+          "desc": "Web search - q, category (general|news|images), lang, max_results<=10",
+          "example": {
+            "q": "x402 protocol",
+            "max_results": 5
+          }
         },
         {
           "path": "/contents",
@@ -391,13 +411,20 @@
           "path": "/search-contents",
           "method": "GET",
           "price_usdc": 0.006,
-          "desc": "Web search with the page text of the top results already extracted (up to 5 pages, parallel)"
+          "desc": "Web search with the page text of the top results already extracted (up to 5 pages, parallel)",
+          "example": {
+            "q": "x402 payments",
+            "max_pages": 3
+          }
         },
         {
           "path": "/news",
           "method": "GET",
           "price_usdc": 0.001,
-          "desc": "Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM"
+          "desc": "Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM",
+          "example": {
+            "q": "base chain"
+          }
         },
         {
           "path": "/answer",
@@ -441,7 +468,10 @@
           "path": "/transcript",
           "method": "GET",
           "price_usdc": 0.003,
-          "desc": "Timed transcript - url (required), lang (default en), format (json|text|srt)"
+          "desc": "Timed transcript - url (required), lang (default en), format (json|text|srt)",
+          "example": {
+            "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw"
+          }
         },
         {
           "path": "/meta",
@@ -485,7 +515,12 @@
           "path": "/safe-to-sign",
           "method": "GET+POST",
           "price_usdc": 0.02,
-          "desc": "Pre-sign Safety Firewall: one GREEN/REVIEW/BLOCK verdict fusing tx decode+sim, signature-drainer, address-risk, URL-phishing and token-safety. Call before signing anything."
+          "desc": "Pre-sign Safety Firewall: one GREEN/REVIEW/BLOCK verdict fusing tx decode+sim, signature-drainer, address-risk, URL-phishing and token-safety. Call before signing anything.",
+          "example": {
+            "chain": "base",
+            "to": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "data": "0x095ea7b3"
+          }
         },
         {
           "path": "/simulate",
@@ -541,7 +576,10 @@
           "path": "/screen",
           "method": "GET",
           "price_usdc": 0.005,
-          "desc": "Sanctions + taint screen -> BLOCK/REVIEW/ALLOW"
+          "desc": "Sanctions + taint screen -> BLOCK/REVIEW/ALLOW",
+          "example": {
+            "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+          }
         }
       ],
       "mcp": "",
