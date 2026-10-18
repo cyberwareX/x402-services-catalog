@@ -24,8 +24,8 @@
     "x402_version": 2,
     "note": "Unpaid call returns HTTP 402 with an x402 price quote; sign the USDC EIP-3009 authorization and retry with the X-PAYMENT header. Gasless for the payer."
   },
-  "generated_at": 1789888812,
-  "tool_count": 16,
+  "generated_at": 1792326505,
+  "tool_count": 9,
   "tools": [
     {
       "name": "web-access",
@@ -93,7 +93,7 @@
     {
       "name": "defi-oracle",
       "title": "DeFi Safety Oracle",
-      "description": "Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses.",
+      "description": "Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers \"who is behind this wallet or token\" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. Free quote, $0.10 quick check, $1 full scan.",
       "use_when": [
         "Call it before any swap, token approval, or 'should I buy this' decision - it catches honeypots and hidden sell-taxes so your agent never buys a coin it can't sell."
       ],
@@ -153,6 +153,90 @@
           "method": "GET",
           "price_usdc": 0.01,
           "desc": "Contract-template reputation: honeypot/scam siblings sharing this bytecode fingerprint (fuzzy-matched)"
+        },
+        {
+          "path": "/v1/identity/wallet",
+          "method": "GET",
+          "price_usdc": 0.02,
+          "desc": "Who is behind a wallet: age, ENS, linked X account, deployer history"
+        },
+        {
+          "path": "/v1/identity/x",
+          "method": "GET",
+          "price_usdc": 0.01,
+          "desc": "X/Twitter account profile: age, followers, verified status, trust signals"
+        },
+        {
+          "path": "/v1/identity/token",
+          "method": "GET",
+          "price_usdc": 0.05,
+          "desc": "Who is behind a token: market, socials, creator wallet, impersonation/rug signals"
+        },
+        {
+          "path": "/v1/identity/quick",
+          "method": "GET",
+          "price_usdc": 0.001,
+          "desc": "Cheapest identity taster: feed an address or handle, get a one-line trust verdict"
+        },
+        {
+          "path": "/v1/holders/quote",
+          "method": "GET",
+          "price_usdc": 0,
+          "desc": "Crowd Check free quote: params chain (base|ethereum|robinhood|solana) and token. Returns quote_id, the two options (quick $0.10, full $1) and a teaser (holders, dust, real). If status is computing, call again with params id=<quote_id>"
+        },
+        {
+          "path": "/v1/holders/quick",
+          "method": "GET",
+          "price_usdc": 0.1,
+          "desc": "Crowd Check quick check ($0.10): instant risk score 0-100 with reasons - snipers, launch bundles, dev holding and whether the dev sold, dev-fed insiders, padded holder count, top-10 share, whether the creator can pull the pool (liquidity lock), risky trading hooks, creator rug record. Param quote=<quote_id>"
+        },
+        {
+          "path": "/v1/holders/scan",
+          "method": "GET",
+          "price_usdc": 1.0,
+          "desc": "Crowd Check full scan ($1): is the crowd real? Top 300 real holders profiled (wallet age, real funder traced through routers), funder clusters, fresh wallets, snipers, launch bundles, dev and insider holdings, risk score 0-100, verdict organic/mixed/farmed. Param quote=<quote_id>. Returns a job; call again with the same quote for the result (never charged twice)"
+        },
+        {
+          "path": "/v1/holders/creator",
+          "method": "GET",
+          "price_usdc": 0.02,
+          "desc": "Crowd Check creator check ($0.02): who is behind a token - creator wallet, its funding chain (up to 8 hops) and that chain's record of earlier tokens, wallet age and throwaway-wallet signals, plus any registered name and X account linked to the creator (claimed or proven both ways). Serial launchers flagged. params quote (from /v1/holders/quote)."
+        },
+        {
+          "path": "/v1/holders/pool",
+          "method": "GET",
+          "price_usdc": 0.02,
+          "desc": "Crowd Check pool safety ($0.02): can the liquidity be pulled (burned / wallet / a lock service with the real locked share and unlock date) and what a Uniswap v4 hook may do on every trade (take a cut, set any fee, block sells), platform hook or the creator's own. params quote."
+        },
+        {
+          "path": "/v1/holders/verdict",
+          "method": "GET",
+          "price_usdc": 0.03,
+          "desc": "Crowd Check instant verdict for trading bots ($0.03): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready."
+        },
+        {
+          "path": "/v1/paper/backtest",
+          "method": "GET",
+          "price_usdc": 0.05,
+          "desc": "Paper test ($0.05): what would have happened if you had followed a rule on every new token we found. params preset (avoid_farms | locked_pools_only | clean_checks | small_pools_only | farms_only | everything) or filters, horizon 1|6|24, chain, bankroll. Returns trades, win rate with 95% interval, average and median return, drawdown, crash rate, and the same numbers for ALL tokens as a baseline, fees and price impact charged."
+        },
+        {
+          "path": "/v1/watch/start",
+          "method": "GET",
+          "price_usdc": 0.1,
+          "desc": "Crowd Check watch ($0.10): watch one token for 1 to 168 hours. Returns a ticket. Params chain (base|ethereum|robinhood|solana), token, hours. Then poll for plain alerts: pool liquidity down 30 percent, price down 50 percent, creator balance down 50 percent, measured from the best level since the watch began."
+        },
+        {
+          "path": "/v1/watch/poll",
+          "method": "GET",
+          "price_usdc": 0.01,
+          "desc": "Crowd Check watch poll ($0.01): what changed since the last look. Param ticket from /v1/watch/start. Plain-language alerts, none if nothing moved. Not charged when market data is unavailable or the watch expired."
+        },
+        {
+          "path": "/v1/holders/card",
+          "method": "GET",
+          "price_usdc": 0.1,
+          "desc": "Crowd Check plain card ($0.10): who holds the supply, who can pull the pool, who holds powers over the token, and the largest sensible position, under 900 characters with a verdict (go, caution, no_go). Free quote first at /v1/holders/quote, then ?quote=<id>. Not financial advice."
         }
       ],
       "auth": {
@@ -178,46 +262,6 @@
       "mcp": "Official MCP registry: io.github.CyberPunk11147/cyberwarex-defi-oracle - tools: token_safety, honeypot_check, contract_risk (install via registry.modelcontextprotocol.io)",
       "well_known": "https://oracle.cyberwarex.com/.well-known/x402",
       "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://oracle.cyberwarex.com/token?address=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base'",
-      "status": "live"
-    },
-    {
-      "name": "voice-stt",
-      "title": "Voice-to-Text",
-      "description": "Pay-per-message speech-to-text for agents that need to hear. Transcribes a voice message (up to 10s) for a flat $0.015 over x402; longer audio billed per 10-second block. Upload wav, mp3, m4a, ogg or webm as multipart form-data.",
-      "use_when": [
-        "Use it whenever audio comes in - a voice note, a call recording, a spoken command - and your agent needs the words as text to act on."
-      ],
-      "category": "Media",
-      "base_url": "https://voice.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/transcribe",
-          "method": "POST",
-          "price_usdc": 0.015,
-          "unit": "per voice message (<=10s)",
-          "desc": "Voice message to text, billed per 10-second block"
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": null
-      },
-      "openapi": "https://voice.cyberwarex.com/openapi.json",
-      "mcp": "Official MCP registry: io.github.CyberPunk11147/cyberwarex-voice-stt - tool: voice_transcribe (install via registry.modelcontextprotocol.io)",
-      "well_known": "https://voice.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -i -X POST -F 'audio=@message.wav' \\\n  https://voice.cyberwarex.com/transcribe",
       "status": "live"
     },
     {
@@ -317,65 +361,11 @@
       "status": "live"
     },
     {
-      "name": "seo-audit",
-      "title": "SEO Audit",
-      "description": "On-page SEO audit of any live URL: title/meta/canonical/robots, Open Graph + Twitter cards, headings, image alts, favicon - a 0-100 score with actionable issues, parsed from the live page on every call.",
-      "use_when": [
-        "Use it when an agent is auditing or improving a website - it scores real on-page SEO so the agent can tell a client exactly what to fix."
-      ],
-      "category": "Web & Data",
-      "base_url": "https://seo.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/audit",
-          "method": "GET",
-          "price_usdc": 0.01,
-          "desc": "Full on-page SEO audit with 0-100 score and issues"
-        },
-        {
-          "path": "/trends",
-          "method": "GET",
-          "price_usdc": 0.02,
-          "desc": "Google Trends for a keyword: interest over time, peak, direction, top + rising related queries (6h cache)"
-        },
-        {
-          "path": "/meta",
-          "method": "GET",
-          "price_usdc": 0,
-          "desc": "Free structured OG/Twitter/favicon metadata preview"
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": {
-          "calls_per_ip_per_day": 1,
-          "header": "X-Free-Trial: 1"
-        }
-      },
-      "openapi": "https://seo.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://seo.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://seo.cyberwarex.com/audit?url=https://example.com'",
-      "status": "live"
-    },
-    {
       "name": "search",
       "title": "Agent Search",
       "description": "Keyless web search for AI agents: one metasearch query across major engines on a dedicated SearXNG instance, clean trimmed JSON (title/url/snippet/engine), up to 10 results. No accounts, no API keys, no subscription. Free trial: 3 calls/day with the 'X-Free-Trial: 1' header.",
       "use_when": [
-        "Call it whenever your agent needs fresh facts from the open web - one keyless query, clean JSON back, no search account to set up."
+        "Call it whenever your agent needs fresh facts from the open web - one keyless query, clean JSON back, no search account to set up. Use /answer when you want ONE cited answer to a question instead of raw links - it searches, reads the top pages, and returns the answer with sources."
       ],
       "category": "Web & Data",
       "base_url": "https://search.cyberwarex.com",
@@ -403,6 +393,12 @@
           "method": "GET",
           "price_usdc": 0.001,
           "desc": "Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM"
+        },
+        {
+          "path": "/answer",
+          "method": "GET",
+          "price_usdc": 0.03,
+          "desc": "Answer engine - one call searches, reads the top pages, and returns a concise cited answer with sources"
         }
       ],
       "auth": {
@@ -428,55 +424,6 @@
       "mcp": null,
       "well_known": "https://search.cyberwarex.com/.well-known/x402",
       "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://search.cyberwarex.com/search?q=x402+protocol&max_results=3'",
-      "status": "live"
-    },
-    {
-      "name": "email-validate",
-      "title": "Email Validation",
-      "description": "Keyless email validation for agents & apps: RFC syntax, MX/DNS deliverability, disposable-domain detection (8k+ list), role-account & free-provider flags, typo suggestions, 0-100 score. No SMTP callouts. Free trial: 3/day with 'X-Free-Trial: 1'.",
-      "use_when": [
-        "Use it before sending to, signing up, or trusting an email address - flags typos, dead domains, and disposable throwaways so your agent doesn't waste a send."
-      ],
-      "category": "Web & Data",
-      "base_url": "https://validate.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/validate",
-          "method": "GET",
-          "price_usdc": 0.005,
-          "desc": "Validate one email - syntax, MX, disposable, role, score, verdict"
-        },
-        {
-          "path": "/validate-batch",
-          "method": "POST",
-          "price_usdc": 0.05,
-          "unit": "flat, up to 100 emails",
-          "desc": "Batch validate up to 100 emails for one flat price"
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": {
-          "calls_per_ip_per_day": 3,
-          "header": "X-Free-Trial: 1"
-        }
-      },
-      "openapi": "https://validate.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://validate.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://validate.cyberwarex.com/validate?email=test@gmail.com'",
       "status": "live"
     },
     {
@@ -525,57 +472,6 @@
       "mcp": null,
       "well_known": "https://video.cyberwarex.com/.well-known/x402",
       "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://video.cyberwarex.com/meta?url=https://www.youtube.com/watch?v=arj7oStGLkU'",
-      "status": "live"
-    },
-    {
-      "name": "uptime-monitor",
-      "title": "x402 Uptime Monitor",
-      "description": "Fleet-wide reliability data over the x402 rail: uptime percentage, average response time and check counts per endpoint over 1/7/30-day windows. Add endpoints, pull stats, no signup - one USDC micropayment per call.",
-      "use_when": [
-        "Use it when an agent needs to know if an endpoint is up and how fast - pay-per-check monitoring with no dashboard to run."
-      ],
-      "category": "Infrastructure",
-      "base_url": "https://uptime.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/stats",
-          "method": "GET",
-          "price_usdc": 0.002,
-          "desc": "Fleet-wide uptime/latency stats over 1, 7 and 30 day windows."
-        },
-        {
-          "path": "/endpoints/{name}/history",
-          "method": "GET",
-          "price_usdc": 0.002,
-          "desc": "Raw check history for one endpoint: every probe with timestamp, status code, response time and up/down verdict over a day window."
-        },
-        {
-          "path": "/endpoints/{name}/sla",
-          "method": "GET",
-          "price_usdc": 0.002,
-          "desc": "SLA report for one endpoint: uptime percentage, downtime periods, mean/p95/p99 latency and total checks."
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": null
-      },
-      "openapi": "https://uptime.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://uptime.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -i 'https://uptime.cyberwarex.com/stats'",
       "status": "live"
     },
     {
@@ -633,47 +529,6 @@
       "status": "live"
     },
     {
-      "name": "sig-decoder",
-      "title": "Signature Decoder",
-      "description": "Pay-per-call decoder for off-chain signature requests: turn an opaque EIP-712 typed-data request (eth_signTypedData_v4) or a personal_sign string into a human-readable summary plus security risk flags for the drainer patterns wallets miss - gasless unlimited token approvals (EIP-2612 Permit, DAI permit, Uniswap Permit2) and asset-transferring marketplace orders (Seaport). Keyless, deterministic, no network.",
-      "use_when": [
-        "Use it before approving an off-chain signature (Permit, Permit2, Seaport) - it decodes what you're really authorizing and flags drainer patterns."
-      ],
-      "category": "Security & DeFi",
-      "base_url": "https://sign.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/decode",
-          "method": "GET",
-          "price_usdc": 0.002,
-          "desc": "Decode an EIP-712 typed-data or personal_sign request into a summary + security risk flags."
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": {
-          "calls_per_ip_per_day": 3
-        }
-      },
-      "openapi": "https://sign.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://sign.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://sign.cyberwarex.com/decode?typed_data=<url-encoded EIP-712 JSON>'",
-      "status": "live"
-    },
-    {
       "name": "sanctions",
       "title": "Address Risk",
       "description": "Pay-per-call address-risk and sanctions screening for agents. /risk returns a 0-100 risk score and a BLOCK/REVIEW/ALLOW verdict composed from OFAC sanctions, a curated taint set (mixer/hack/scam), and CyberWareX's own DeFi Oracle scam/deployer ledger - a deployer-history signal no generic list has. /screen is the sanctions/taint-only compliance check. Deterministic, keyless, no LLM.",
@@ -719,159 +574,6 @@
       "mcp": "",
       "well_known": "https://sanctions.cyberwarex.com/.well-known/x402",
       "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://sanctions.cyberwarex.com/screen?address=0x0000000000000000000000000000000000000001'",
-      "status": "live"
-    },
-    {
-      "name": "abi-fetcher",
-      "title": "Contract ABI",
-      "description": "Pay-per-call contract ABI fetcher for AI agents: get a verified contract's ABI and metadata (function/event signatures, name, compiler, proxy detection) by address, keylessly, from Sourcify. Block explorers gate the ABI behind an API key; this does not. Pairs with tx-sim (calldata) and sig-decoder (signatures). Base, Ethereum, Arbitrum, Optimism, Polygon, BSC, Avalanche.",
-      "use_when": [
-        "Reach for it when your agent needs a contract's ABI to decode or call it - fetched by address, keyless, no explorer account."
-      ],
-      "category": "Onchain Data",
-      "base_url": "https://abi.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/abi",
-          "method": "GET",
-          "price_usdc": 0.003,
-          "desc": "Verified ABI + function/event signatures + proxy detection for a contract address."
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": {
-          "calls_per_ip_per_day": 3
-        }
-      },
-      "openapi": "https://abi.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://abi.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://abi.cyberwarex.com/abi?address=0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2&chain=ethereum'",
-      "status": "live"
-    },
-    {
-      "name": "url-safety",
-      "title": "URL Safety",
-      "description": "Pay-per-call URL / phishing safety check for AI agents: score a link from keyless deterministic heuristics (typosquat/homoglyph of a known brand, punycode/mixed-script hosts, credentials-in-URL, raw-IP hosts, suspicious TLDs, deep subdomains) plus a best-effort domain-age check via RDAP. Returns a 0-100 risk score + SAFE/SUSPICIOUS/DANGEROUS verdict + reasons. Pairs with the web/oracle tools.",
-      "use_when": [
-        "Use it before opening or forwarding any link - scores phishing and typosquat risk so your agent (or its user) doesn't click a trap."
-      ],
-      "category": "Security & DeFi",
-      "base_url": "https://safe.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/check",
-          "method": "GET",
-          "price_usdc": 0.003,
-          "desc": "Phishing-risk score + SAFE/SUSPICIOUS/DANGEROUS verdict + reasons for a URL."
-        },
-        {
-          "path": "/domain",
-          "method": "GET",
-          "price_usdc": 0.002,
-          "desc": "WHOIS (registrar, age, expiry, nameservers) + live DNS (A/AAAA/MX/NS/TXT) for a domain, keyless"
-        },
-        {
-          "path": "/subscribe",
-          "method": "GET+POST",
-          "price_usdc": null,
-          "desc": "Buy prepaid suite credit (pay usd=N, get N+10% credit as a cwx_ key). Use the key suite-wide via X-Subscription-Key."
-        },
-        {
-          "path": "/credits",
-          "method": "GET",
-          "price_usdc": 0,
-          "desc": "Free: check a prepaid key balance (?key=cwx_...)."
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": {
-          "calls_per_ip_per_day": 3
-        }
-      },
-      "openapi": "https://safe.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://safe.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://safe.cyberwarex.com/check?url=https://coinbase.com.secure-login.xyz/verify'",
-      "status": "live"
-    },
-    {
-      "name": "stocks",
-      "title": "SEC Company Data",
-      "description": "Pay-per-call US company data from SEC EDGAR (keyless, public domain): resolve a ticker to a company profile, list recent filings (10-K/10-Q/8-K/Form 4) with direct document URLs, and pull key annual fundamentals (revenue, net income, assets, equity, EPS) from XBRL. No API key.",
-      "use_when": [
-        "Use it for company research - a US company's profile, SEC filings, and fundamentals straight from EDGAR, keyless."
-      ],
-      "category": "Data & Research",
-      "base_url": "https://stocks.cyberwarex.com",
-      "endpoints": [
-        {
-          "path": "/company",
-          "method": "GET+POST",
-          "price_usdc": 0.002,
-          "desc": "Company profile for a US ticker: name, CIK, SIC industry, exchanges, tickers, incorporation state"
-        },
-        {
-          "path": "/filings",
-          "method": "GET+POST",
-          "price_usdc": 0.004,
-          "desc": "Recent SEC filings (10-K/10-Q/8-K/Form 4) with form, dates, accession and direct doc URL; filter by form"
-        },
-        {
-          "path": "/fundamentals",
-          "method": "GET+POST",
-          "price_usdc": 0.004,
-          "desc": "Key annual XBRL fundamentals: revenue, net income, assets, liabilities, equity, cash, EPS, shares"
-        }
-      ],
-      "auth": {
-        "api_key_required": false,
-        "account_required": false
-      },
-      "payment": {
-        "protocol": "x402",
-        "asset": "USDC",
-        "network": "eip155:8453",
-        "network_name": "Base",
-        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
-        "facilitator": "coinbase-cdp",
-        "header": "X-PAYMENT",
-        "x402_version": 2,
-        "free_trial": {
-          "calls_per_ip_per_day": 3
-        }
-      },
-      "openapi": "https://stocks.cyberwarex.com/openapi.json",
-      "mcp": null,
-      "well_known": "https://stocks.cyberwarex.com/.well-known/x402",
-      "example_request": "curl -H 'X-Free-Trial: 1' 'https://stocks.cyberwarex.com/fundamentals?ticker=AAPL'",
       "status": "live"
     },
     {
@@ -925,6 +627,63 @@
       "mcp": null,
       "well_known": "https://weather.cyberwarex.com/.well-known/x402",
       "example_request": "curl -H 'X-Free-Trial: 1' 'https://weather.cyberwarex.com/current?place=Los%20Angeles&air=1'",
+      "status": "live"
+    },
+    {
+      "name": "council",
+      "title": "Agent Council",
+      "description": "Pay-per-call council of AI models for agents that need a judgement call rather than a lookup. Your question goes to 3 or 4 DIFFERENT models (deepseek, gpt-oss, glm, nemotron); each answers independently, and in deep mode each then sees the others and revises. A chair returns one verdict with confidence, the points every seat agreed on, the dissent that held, and what would flip the answer. Use it when one model's opinion is not enough: is this safe, is this worth it, which option. Typical answer in 5-7 seconds. No account, no API key. The grounded tier (/grounded) spends on real evidence first: it scans your question for a contract address, URL or $TICKER, buys the matching checks (honeypot sim, sanctions, page content, SEC profile), and one analyst returns a verdict that rests on what was found, with the source list and spend ledger included.",
+      "use_when": [
+        "Call it when the next step is a judgement call rather than a fact: whether to trust something, which of two options to take, whether a deal or a risk is worth it. You get several independent models' verdict plus where they disagreed, instead of one model's guess. Use /grounded when the decision turns on facts we can go and buy: a contract address, a link, a ticker."
+      ],
+      "category": "Reasoning & Decisions",
+      "base_url": "https://council.cyberwarex.com",
+      "endpoints": [
+        {
+          "path": "/council",
+          "method": "GET+POST",
+          "price_usdc": 0.01,
+          "desc": "Quick council: 3 models, 1 round -> verdict, confidence, consensus, dissent, watch_for"
+        },
+        {
+          "path": "/council-deep",
+          "method": "GET+POST",
+          "price_usdc": 0.03,
+          "desc": "Deep council: 4 models, 2 rounds (each seat sees the others and revises) -> a verdict that survived cross-examination"
+        },
+        {
+          "path": "/grounded",
+          "method": "GET+POST",
+          "price_usdc": 0.05,
+          "desc": "Grounded council: priced per request ($0.05-$0.12). We buy the evidence first (honeypot sim, sanctions screen, page content, SEC profile), then one analyst judges on what came back; the response lists every source and what we spent. Measured equal to the 4-model panel on evidence-rich questions, and about 6x faster. GET it unpaid to see the quote first. Needs a contract address, URL or $TICKER in the question: with nothing to check it returns 503 and charges nothing.",
+          "price_usdc_max": 0.12
+        }
+      ],
+      "auth": {
+        "api_key_required": false,
+        "account_required": false
+      },
+      "payment": {
+        "protocol": "x402",
+        "asset": "USDC",
+        "network": "eip155:8453",
+        "network_name": "Base",
+        "asset_contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "pay_to": "0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
+        "facilitator": "coinbase-cdp",
+        "header": "X-PAYMENT",
+        "x402_version": 2,
+        "free_trial": {
+          "calls_per_ip_per_day": 1,
+          "endpoints": [
+            "/council"
+          ]
+        }
+      },
+      "openapi": "https://council.cyberwarex.com/openapi.json",
+      "mcp": null,
+      "well_known": "https://council.cyberwarex.com/.well-known/x402",
+      "example_request": "curl -H 'X-Free-Trial: 1' 'https://council.cyberwarex.com/council?q=Is%20a%203-day-old%20pool%20paying%2042%25%20APY%20with%20an%20unverified%20proxy%20admin%20safe%3F'",
       "status": "live"
     }
   ]
