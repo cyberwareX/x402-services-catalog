@@ -31,7 +31,7 @@
     "auth": "none",
     "note": "One hosted MCP endpoint for the whole suite: initialize / tools/list / tools/call. An unpaid tools/call returns that tool's x402 invoice; pay and retry with x_payment."
   },
-  "generated_at": 1792330229,
+  "generated_at": 1792377029,
   "service_count": 9,
   "services": [
     {
@@ -90,7 +90,7 @@
       ],
       "mcp": "Official MCP registry: io.github.CyberPunk11147/cyberwarex-web-access - tools: web_fetch, web_extract, web_screenshot, web_pdf (install via registry.modelcontextprotocol.io)",
       "not_for": "searching (you must already know the URL); YouTube (use video-intel); judging whether a link is safe (use url-safety).",
-      "cheaper_alternative": "/fetch and /extract are $0.002. Only pay $0.005 for /screenshot, /pdf or /ocr when you need pixels or scanned text, not when you need the words on the page.",
+      "cheaper_alternative": "/fetch and /extract are $0.001. Only pay $0.005 for /screenshot, /pdf or /ocr when you need pixels or scanned text, not when you need the words on the page.",
       "well_known": "https://web.cyberwarex.com/.well-known/x402",
       "openapi": "https://web.cyberwarex.com/openapi.json",
       "free_trial": null,
@@ -102,7 +102,7 @@
       "name": "DeFi Safety Oracle",
       "url": "https://oracle.cyberwarex.com",
       "category": "Security & DeFi",
-      "summary": "Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers \"who is behind this wallet or token\" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. Free quote, $0.10 quick check, $1 full scan.",
+      "summary": "Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers \"who is behind this wallet or token\" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. Free quote, $0.02 quick check, $1 full scan.",
       "status": "live",
       "payment": {
         "protocol": "x402",
@@ -202,13 +202,13 @@
           "path": "/v1/holders/quote",
           "method": "GET",
           "price_usdc": 0,
-          "desc": "Crowd Check free quote: params chain (base|ethereum|robinhood|solana) and token. Returns quote_id, the two options (quick $0.10, full $1) and a teaser (holders, dust, real). If status is computing, call again with params id=<quote_id>"
+          "desc": "Crowd Check free quote: params chain (base|ethereum|robinhood|solana) and token. Returns quote_id, the two options (quick $0.02, full $1) and a teaser (holders, dust, real). If status is computing, call again with params id=<quote_id>"
         },
         {
           "path": "/v1/holders/quick",
           "method": "GET",
-          "price_usdc": 0.1,
-          "desc": "Crowd Check quick check ($0.10): instant risk score 0-100 with reasons - snipers, launch bundles, dev holding and whether the dev sold, dev-fed insiders, padded holder count, top-10 share, whether the creator can pull the pool (liquidity lock), risky trading hooks, creator rug record. Param quote=<quote_id>"
+          "price_usdc": 0.02,
+          "desc": "Crowd Check quick check ($0.02): instant risk score 0-100 with reasons - snipers, launch bundles, dev holding and whether the dev sold, dev-fed insiders, padded holder count, top-10 share, whether the creator can pull the pool (liquidity lock), risky trading hooks, creator rug record. Param quote=<quote_id>"
         },
         {
           "path": "/v1/holders/scan",
@@ -219,20 +219,20 @@
         {
           "path": "/v1/holders/creator",
           "method": "GET",
-          "price_usdc": 0.02,
-          "desc": "Crowd Check creator check ($0.02): who is behind a token - creator wallet, its funding chain (up to 8 hops) and that chain's record of earlier tokens, wallet age and throwaway-wallet signals, plus any registered name and X account linked to the creator (claimed or proven both ways). Serial launchers flagged. params quote (from /v1/holders/quote)."
+          "price_usdc": 0.01,
+          "desc": "Crowd Check creator check ($0.01): who is behind a token - creator wallet, its funding chain (up to 8 hops) and that chain's record of earlier tokens, wallet age and throwaway-wallet signals, plus any registered name and X account linked to the creator (claimed or proven both ways). Serial launchers flagged. params quote (from /v1/holders/quote)."
         },
         {
           "path": "/v1/holders/pool",
           "method": "GET",
-          "price_usdc": 0.02,
-          "desc": "Crowd Check pool safety ($0.02): can the liquidity be pulled (burned / wallet / a lock service with the real locked share and unlock date) and what a Uniswap v4 hook may do on every trade (take a cut, set any fee, block sells), platform hook or the creator's own. params quote."
+          "price_usdc": 0.01,
+          "desc": "Crowd Check pool safety ($0.01): can the liquidity be pulled (burned / wallet / a lock service with the real locked share and unlock date) and what a Uniswap v4 hook may do on every trade (take a cut, set any fee, block sells), platform hook or the creator's own. params quote."
         },
         {
           "path": "/v1/holders/verdict",
           "method": "GET",
-          "price_usdc": 0.03,
-          "desc": "Crowd Check instant verdict for trading bots ($0.03): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready.",
+          "price_usdc": 0.01,
+          "desc": "Crowd Check instant verdict for trading bots ($0.01): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready.",
           "example": {
             "chain": "base",
             "token": "0xTOKEN"
@@ -265,7 +265,7 @@
       ],
       "mcp": "Official MCP registry: io.github.CyberPunk11147/cyberwarex-defi-oracle - tools: token_safety, honeypot_check, contract_risk (install via registry.modelcontextprotocol.io)",
       "not_for": "price feeds or sanctions checks (chain-data, sanctions). It judges the TOKEN CONTRACT, never the person sending it.",
-      "cheaper_alternative": "/risk/explain at $0.01 answers 'should my agent touch this' for most cases. /honeypot ($0.04) and /token ($0.06) are for when you need the full simulation and powers breakdown. /screen at $0.15 is a bulk sweep, not a single lookup.",
+      "cheaper_alternative": "/risk/explain at $0.005 answers 'should my agent touch this' for most cases. /honeypot ($0.005) and /token ($0.012) are for when you need the full simulation and powers breakdown. /screen at $0.03 is a bulk sweep, not a single lookup. For a new token's holders, /v1/holders/verdict ($0.01) is the one-call answer.",
       "well_known": "https://oracle.cyberwarex.com/.well-known/x402",
       "openapi": "https://oracle.cyberwarex.com/openapi.json",
       "free_trial": {
@@ -274,7 +274,11 @@
       },
       "use_when": "Call it before any swap, token approval, or 'should I buy this' decision - it catches honeypots and hidden sell-taxes so your agent never buys a coin it can't sell.",
       "example_request": "curl -H 'X-Free-Trial: 1' \\\n  'https://oracle.cyberwarex.com/token?address=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base'",
-      "docs": "https://cyberwarex.com/assets/oracle-quickstart.html"
+      "docs": "https://cyberwarex.com/assets/oracle-quickstart.html",
+      "libraries": {
+        "typescript_sdk": "https://github.com/cyberwareX/identity-plugins (package @cyberwarex/identity: xProfile, walletProfile, tokenCheck, pays x402 for you)",
+        "elizaos_plugin": "https://github.com/cyberwareX/identity-plugins (package @cyberwarex/plugin-identity: CHECK_X_ACCOUNT, CHECK_WALLET, CHECK_TOKEN actions)"
+      }
     },
     {
       "id": "chain-data",
@@ -569,7 +573,7 @@
         {
           "path": "/risk",
           "method": "GET",
-          "price_usdc": 0.01,
+          "price_usdc": 0.005,
           "desc": "Full address-risk score + BLOCK/REVIEW/ALLOW verdict from sanctions, taint, and our scam/deployer ledger."
         },
         {
@@ -584,7 +588,7 @@
       ],
       "mcp": "",
       "not_for": "judging a token contract. A clean screen says nothing about a honeypot, which is defi-oracle.",
-      "cheaper_alternative": "/screen is $0.005 for OFAC plus taint. /risk at $0.01 adds our scam-deployer ledger: worth it before sending funds, overkill for a routine label.",
+      "cheaper_alternative": "/screen and /risk are the same call at $0.005: OFAC, taint and our scam-deployer ledger in one answer.",
       "well_known": "https://sanctions.cyberwarex.com/.well-known/x402",
       "openapi": "https://sanctions.cyberwarex.com/openapi.json",
       "free_trial": {

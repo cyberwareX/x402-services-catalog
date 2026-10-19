@@ -24,7 +24,7 @@
     "x402_version": 2,
     "note": "Unpaid call returns HTTP 402 with an x402 price quote; sign the USDC EIP-3009 authorization and retry with the X-PAYMENT header. Gasless for the payer."
   },
-  "generated_at": 1792330228,
+  "generated_at": 1792377029,
   "tool_count": 9,
   "tools": [
     {
@@ -97,7 +97,7 @@
     {
       "name": "defi-oracle",
       "title": "DeFi Safety Oracle",
-      "description": "Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers \"who is behind this wallet or token\" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. Free quote, $0.10 quick check, $1 full scan.",
+      "description": "Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers \"who is behind this wallet or token\" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. Free quote, $0.02 quick check, $1 full scan.",
       "use_when": [
         "Call it before any swap, token approval, or 'should I buy this' decision - it catches honeypots and hidden sell-taxes so your agent never buys a coin it can't sell."
       ],
@@ -190,13 +190,13 @@
           "path": "/v1/holders/quote",
           "method": "GET",
           "price_usdc": 0,
-          "desc": "Crowd Check free quote: params chain (base|ethereum|robinhood|solana) and token. Returns quote_id, the two options (quick $0.10, full $1) and a teaser (holders, dust, real). If status is computing, call again with params id=<quote_id>"
+          "desc": "Crowd Check free quote: params chain (base|ethereum|robinhood|solana) and token. Returns quote_id, the two options (quick $0.02, full $1) and a teaser (holders, dust, real). If status is computing, call again with params id=<quote_id>"
         },
         {
           "path": "/v1/holders/quick",
           "method": "GET",
-          "price_usdc": 0.1,
-          "desc": "Crowd Check quick check ($0.10): instant risk score 0-100 with reasons - snipers, launch bundles, dev holding and whether the dev sold, dev-fed insiders, padded holder count, top-10 share, whether the creator can pull the pool (liquidity lock), risky trading hooks, creator rug record. Param quote=<quote_id>"
+          "price_usdc": 0.02,
+          "desc": "Crowd Check quick check ($0.02): instant risk score 0-100 with reasons - snipers, launch bundles, dev holding and whether the dev sold, dev-fed insiders, padded holder count, top-10 share, whether the creator can pull the pool (liquidity lock), risky trading hooks, creator rug record. Param quote=<quote_id>"
         },
         {
           "path": "/v1/holders/scan",
@@ -207,20 +207,20 @@
         {
           "path": "/v1/holders/creator",
           "method": "GET",
-          "price_usdc": 0.02,
-          "desc": "Crowd Check creator check ($0.02): who is behind a token - creator wallet, its funding chain (up to 8 hops) and that chain's record of earlier tokens, wallet age and throwaway-wallet signals, plus any registered name and X account linked to the creator (claimed or proven both ways). Serial launchers flagged. params quote (from /v1/holders/quote)."
+          "price_usdc": 0.01,
+          "desc": "Crowd Check creator check ($0.01): who is behind a token - creator wallet, its funding chain (up to 8 hops) and that chain's record of earlier tokens, wallet age and throwaway-wallet signals, plus any registered name and X account linked to the creator (claimed or proven both ways). Serial launchers flagged. params quote (from /v1/holders/quote)."
         },
         {
           "path": "/v1/holders/pool",
           "method": "GET",
-          "price_usdc": 0.02,
-          "desc": "Crowd Check pool safety ($0.02): can the liquidity be pulled (burned / wallet / a lock service with the real locked share and unlock date) and what a Uniswap v4 hook may do on every trade (take a cut, set any fee, block sells), platform hook or the creator's own. params quote."
+          "price_usdc": 0.01,
+          "desc": "Crowd Check pool safety ($0.01): can the liquidity be pulled (burned / wallet / a lock service with the real locked share and unlock date) and what a Uniswap v4 hook may do on every trade (take a cut, set any fee, block sells), platform hook or the creator's own. params quote."
         },
         {
           "path": "/v1/holders/verdict",
           "method": "GET",
-          "price_usdc": 0.03,
-          "desc": "Crowd Check instant verdict for trading bots ($0.03): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready.",
+          "price_usdc": 0.01,
+          "desc": "Crowd Check instant verdict for trading bots ($0.01): ok / caution / avoid with risk score, top reasons and flags (liquidity pullable, serial launcher, v4 hook, bundled share). params chain, token. Returns 202, not charged, until ready.",
           "example": {
             "chain": "base",
             "token": "0xTOKEN"
@@ -576,7 +576,7 @@
         {
           "path": "/risk",
           "method": "GET",
-          "price_usdc": 0.01,
+          "price_usdc": 0.005,
           "desc": "Full address-risk score + BLOCK/REVIEW/ALLOW verdict from sanctions, taint, and our scam/deployer ledger."
         },
         {
