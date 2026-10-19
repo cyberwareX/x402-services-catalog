@@ -24,7 +24,7 @@
     "x402_version": 2,
     "note": "Unpaid call returns HTTP 402 with an x402 price quote; sign the USDC EIP-3009 authorization and retry with the X-PAYMENT header. Gasless for the payer."
   },
-  "generated_at": 1792377029,
+  "generated_at": 1792417114,
   "tool_count": 9,
   "tools": [
     {
@@ -426,6 +426,26 @@
           "method": "GET",
           "price_usdc": 0.03,
           "desc": "Answer engine - one call searches, reads the top pages, and returns a concise cited answer with sources"
+        },
+        {
+          "path": "/search-extract",
+          "method": "GET",
+          "price_usdc": 0.01,
+          "desc": "Search + fetch + extract in one call: top results with page text and the elements matching a CSS selector",
+          "example": {
+            "q": "x402 payments",
+            "selector": "h1, h2",
+            "max_results": 3
+          }
+        },
+        {
+          "path": "/bundle",
+          "method": "POST",
+          "price_usdc": 5.0,
+          "desc": "Prepaid credits bundle: pay once (1-50 USD), get a cwx_ key with 10 percent extra credit for every cyberwarex host",
+          "example": {
+            "usd": 5
+          }
         }
       ],
       "auth": {

@@ -104,6 +104,8 @@ Keyless web search for AI agents: one metasearch query across major engines on a
 - `GET /search-contents` ($0.006 USDC) - Web search with the page text of the top results already extracted (up to 5 pages, parallel)
 - `GET /news` ($0.001 USDC) - Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM
 - `GET /answer` ($0.03 USDC) - Answer engine - one call searches, reads the top pages, and returns a concise cited answer with sources
+- `GET /search-extract` ($0.01 USDC) - Search + fetch + extract in one call: top results with page text and the elements matching a CSS selector
+- `POST /bundle` ($5.0 USDC) - Prepaid credits bundle: pay once (1-50 USD), get a cwx_ key with 10 percent extra credit for every cyberwarex host
 - Free trial: 3 call(s)/day per IP (header `X-Free-Trial: 1`)
 - OpenAPI: https://search.cyberwarex.com/openapi.json
 - Example: `curl -H 'X-Free-Trial: 1' \

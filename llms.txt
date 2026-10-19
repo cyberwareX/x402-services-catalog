@@ -8,6 +8,8 @@ Directory (JSON): https://cyberwarex.com/.well-known/x402
 
 START HERE: https://cyberwarex.com/assets/SKILL.md maps a problem to the one endpoint that solves it, says what each service is NOT for, and names the cheapest route. Read it before picking from the list below.
 
+Need something BUILT rather than an API call? Fixed-price bot, scraper and integration builds, paid in USDC: https://cyberwarex.com/gigs.json
+
 ## Services (9)
 
 ## Recipes (copy-paste; add -H 'X-Free-Trial: 1' to try one free where offered)
@@ -117,6 +119,8 @@ Base URL: https://search.cyberwarex.com
 - GET /search-contents  $0.006 USDC - Web search with the page text of the top results already extracted (up to 5 pages, parallel)
 - GET /news  $0.001 USDC - Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM
 - GET /answer  $0.03 USDC - Answer engine - one call searches, reads the top pages, and returns a concise cited answer with sources
+- GET /search-extract  $0.01 USDC - Search + fetch + extract in one call: top results with page text and the elements matching a CSS selector
+- POST /bundle  $5.0 USDC - Prepaid credits bundle: pay once (1-50 USD), get a cwx_ key with 10 percent extra credit for every cyberwarex host
 - Free trial: 3 call(s)/day per IP - send header 'X-Free-Trial: 1'
 - x402 manifest: https://search.cyberwarex.com/.well-known/x402
 - OpenAPI: https://search.cyberwarex.com/openapi.json
