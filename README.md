@@ -15,13 +15,13 @@ Machine-readable, always-current versions (this repo mirrors them):
 - **No account, no API key.** An unpaid call returns HTTP 402 with a price quote; sign the USDC EIP-3009 authorization and retry with the `X-PAYMENT` header. Gasless for the payer.
 - Contact: x402@cyberwarex.com
 
-## Services (9)
+## Services (8)
 
 ### Agent Web Access
 
-Give your agent reliable eyes on the live web - the one thing an LLM can't do natively. Fetches JavaScript-rendered pages as clean, LLM-ready markdown, extracts elements by CSS selector, and captures full-page screenshots or PDFs of any public URL.
+Web scraping API for AI agents: reliable eyes on the live web, the one thing an LLM can't do natively. Fetches JavaScript-rendered pages as clean, LLM-ready markdown, extracts elements by CSS selector, and captures full-page screenshots or PDFs of any public URL.
 
-**Use when:** Reach for it when your agent must read a page it was handed, scrape live data, screenshot a site for a report, or turn a URL into a PDF - any time the answer lives on a website the model can't see.
+**Use when:** Reach for it when your agent must read a page it was handed, scrape live data, screenshot a site for a report, or turn a URL into a PDF: any time the answer lives on a website the model can't see.
 
 - Base URL: `https://web.cyberwarex.com`
 - `GET /fetch` ($0.001 USDC) - Render a page to markdown/text/html
@@ -29,15 +29,15 @@ Give your agent reliable eyes on the live web - the one thing an LLM can't do na
 - `GET /screenshot` ($0.005 USDC) - Full-page PNG screenshot
 - `GET /pdf` ($0.005 USDC) - Render a page to PDF
 - `GET /ocr` ($0.005 USDC) - OCR: extract text from an image URL (screenshot/scan/receipt/photo) via Tesseract; SSRF-guarded, no charge on empty
-- MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-web-access - tools: web_fetch, web_extract, web_screenshot, web_pdf (install via registry.modelcontextprotocol.io)
+- MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-web-access: tools: web_fetch, web_extract, web_screenshot, web_pdf (install via registry.modelcontextprotocol.io)
 - OpenAPI: https://web.cyberwarex.com/openapi.json
 - Example: `curl -i 'https://web.cyberwarex.com/fetch?url=https://example.com&format=markdown'`
 
 ### DeFi Safety Oracle
 
-Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable proxy, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header - no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers "who is behind this wallet or token" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. Free quote, $0.02 quick check, $1 full scan.
+Answer 'is this token safe to trade?' before committing funds. Deterministic, evidence-carrying rug/honeypot risk assessment across 6 EVM chains (Base, BSC, Ethereum, Polygon, Arbitrum, Robinhood Chain): live buy/sell simulation, contract powers (upgradeable contract, owner mint/pause/blacklist), plus a GoPlus/honeypot.is cross-check. Grade A-F + tradeable flag. Free trial: first 3 calls/day per IP with the 'X-Free-Trial: 1' header: no wallet needed to evaluate. Now with a privilege graph (who can upgrade/mint/pause) and dynamic-tax mutability detection. Deep /v1/risk/check runs an adversarial simulation matrix (buy->sell across trade sizes x caller wallets) to catch size- and address-gated honeypots a single probe misses. New: a Crypto Identity Graph (/v1/identity/*) answers "who is behind this wallet or token" - age, real X account, creator history, and impersonation/rug signals built from 130k+ tokens we've graded ourselves. New: Crowd Check (/v1/holders/*) - is the crowd real? Snipers, launch bundles, dev selling, bot farms funded from one source and fake airdrop holder counts, on Base, Ethereum, Robinhood Chain and Solana. The free public daily digest leads with three reject-funnel counts - avoided (bad outcomes the card steers you away from), caution-flagged (tokens flagged at discovery as elevated risk), and survived (followed tokens that did not end badly; candidates only, not an endorsement, not a score, not a grade). Free quote, $0.02 quick check, $1 full scan.
 
-**Use when:** Call it before any swap, token approval, or 'should I buy this' decision - it catches honeypots and hidden sell-taxes so your agent never buys a coin it can't sell.
+**Use when:** Call it before any swap, token approval, or 'should I buy this' decision: it catches honeypots and hidden sell-taxes so your agent never buys a coin it can't sell.
 
 - Base URL: `https://oracle.cyberwarex.com`
 - `GET /contract` ($0.008 USDC) - Contract powers + ownership analysis
@@ -64,16 +64,16 @@ Answer 'is this token safe to trade?' before committing funds. Deterministic, ev
 - `GET /v1/watch/poll` ($0.01 USDC) - Crowd Check watch poll ($0.01): what changed since the last look. Param ticket from /v1/watch/start. Plain-language alerts, none if nothing moved. Not charged when market data is unavailable or the watch expired.
 - `GET /v1/holders/card` ($0.1 USDC) - Crowd Check plain card ($0.10): who holds the supply, who can pull the pool, who holds powers over the token, and the largest sensible position, under 900 characters with a verdict (go, caution, no_go). Free quote first at /v1/holders/quote, then ?quote=<id>. Not financial advice.
 - Free trial: 3 call(s)/day per IP (header `X-Free-Trial: 1`)
-- MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-defi-oracle - tools: token_safety, honeypot_check, contract_risk (install via registry.modelcontextprotocol.io)
+- MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-defi-oracle: tools: token_safety, honeypot_check, contract_risk (install via registry.modelcontextprotocol.io)
 - OpenAPI: https://oracle.cyberwarex.com/openapi.json
 - Example: `curl -H 'X-Free-Trial: 1' \
   'https://oracle.cyberwarex.com/token?address=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base'`
 
 ### Onchain Query API
 
-Pay-per-call EVM chain data for AI agents: wallet balances, token profiles with live DEX market data, spot prices, gas market, decoded transactions, and ENS - across Base, Ethereum, Arbitrum, Optimism, Polygon. No API keys, no node infra, no subscription: one x402 USDC micropayment per call.
+Pay-per-call EVM chain data for AI agents: wallet balances, token profiles with live DEX market data, spot prices, gas market, decoded transactions, and ENS: across Base, Ethereum, Arbitrum, Optimism, Polygon. No API keys, no node infra, no subscription: one x402 USDC micropayment per call.
 
-**Use when:** Reach for it any time you need a wallet balance, token price, gas, an ENS name, or a tx receipt - no node to run, no RPC key to hold.
+**Use when:** Reach for it any time you need a wallet balance, token price, gas, an ENS name, or a tx receipt: no node to run, no RPC key to hold.
 
 - Base URL: `https://chain.cyberwarex.com`
 - `GET /block` ($0.001 USDC) - Latest block: number, timestamp, age, base fee, gas used/limit (chain-tip / liveness check)
@@ -87,7 +87,7 @@ Pay-per-call EVM chain data for AI agents: wallet balances, token profiles with 
 - `GET /ens` ($0.003 USDC) - ENS resolution both directions (name to address, address to name)
 - `GET /derivatives` ($0.005 USDC) - Perp futures snapshot for a symbol (keyless Binance): funding rate + annualized, mark/index, open interest + USD, 24h stats, long/short ratio
 - Free trial: 1 call(s)/day per IP (header `X-Free-Trial: 1`)
-- MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-chain-data - tools: chain_wallet/token/price/gas/tx/ens (install via registry.modelcontextprotocol.io)
+- MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-chain-data: tools: chain_wallet/token/price/gas/tx/ens (install via registry.modelcontextprotocol.io)
 - OpenAPI: https://chain.cyberwarex.com/openapi.json
 - Example: `curl -H 'X-Free-Trial: 1' \
   'https://chain.cyberwarex.com/price?query=eth'`
@@ -96,10 +96,10 @@ Pay-per-call EVM chain data for AI agents: wallet balances, token profiles with 
 
 Keyless web search for AI agents: one metasearch query across major engines on a dedicated SearXNG instance, clean trimmed JSON (title/url/snippet/engine), up to 10 results. No accounts, no API keys, no subscription. Free trial: 3 calls/day with the 'X-Free-Trial: 1' header.
 
-**Use when:** Call it whenever your agent needs fresh facts from the open web - one keyless query, clean JSON back, no search account to set up. Use /answer when you want ONE cited answer to a question instead of raw links - it searches, reads the top pages, and returns the answer with sources.
+**Use when:** Call it whenever your agent needs fresh facts from the open web: one keyless query, clean JSON back, no search account to set up. Use /answer when you want ONE cited answer to a question instead of raw links - it searches, reads the top pages, and returns the answer with sources.
 
 - Base URL: `https://search.cyberwarex.com`
-- `GET /search` ($0.003 USDC) - Web search - q, category (general|news|images), lang, max_results<=10
+- `GET /search` ($0.003 USDC) - Web search: q, category (general|news|images), lang, max_results<=10
 - `GET /contents` ($0.002 USDC) - Read one web page as clean markdown/text (JS rendered), truncate with max_chars
 - `GET /search-contents` ($0.006 USDC) - Web search with the page text of the top results already extracted (up to 5 pages, parallel)
 - `GET /news` ($0.001 USDC) - Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM
@@ -115,11 +115,11 @@ Keyless web search for AI agents: one metasearch query across major engines on a
 
 YouTube transcripts and metadata for AI agents: per-segment timed transcripts (manual or auto captions; json/text/srt) and rich video metadata (title, channel, duration, chapters, caption inventory). Never downloads media. Free trial: 1 call/day with the 'X-Free-Trial: 1' header.
 
-**Use when:** Reach for it to summarize or fact-check a YouTube video - transcript and metadata as JSON, no media download.
+**Use when:** Reach for it to summarize or fact-check a YouTube video: transcript and metadata as JSON, no media download.
 
 - Base URL: `https://video.cyberwarex.com`
-- `GET /transcript` ($0.003 USDC) - Timed transcript - url (required), lang (default en), format (json|text|srt)
-- `GET /meta` ($0.001 USDC) - Video metadata - title, channel, duration, chapters, available captions
+- `GET /transcript` ($0.003 USDC) - Timed transcript: url (required), lang (default en), format (json|text|srt)
+- `GET /meta` ($0.001 USDC) - Video metadata: title, channel, duration, chapters, available captions
 - Free trial: 1 call(s)/day per IP (header `X-Free-Trial: 1`)
 - OpenAPI: https://video.cyberwarex.com/openapi.json
 - Example: `curl -H 'X-Free-Trial: 1' \
@@ -129,7 +129,7 @@ YouTube transcripts and metadata for AI agents: per-segment timed transcripts (m
 
 Decode an unsigned transaction and know what it does BEFORE signing. Given a chain, to, value and calldata, it decodes the function and arguments, flags dangerous actions (unlimited token approvals, setApprovalForAll, ownership transfers, native-value drains), and runs a keyless eth_call preview reporting whether the transaction would succeed or revert. Works across Base, BSC, Ethereum, Polygon, Arbitrum and Optimism. Deterministic, read-only, no keys. Free trial: 3 calls/day per IP with the 'X-Free-Trial: 1' header. The essential pre-sign safety check for any trading or wallet agent.
 
-**Use when:** Call it right before signing any transaction - preview exactly what it will do and flag risky actions so your agent doesn't sign a drainer.
+**Use when:** Call it right before signing any transaction: preview exactly what it will do and flag risky actions so your agent doesn't sign a drainer.
 
 - Base URL: `https://simulate.cyberwarex.com`
 - `GET+POST /safe-to-sign` ($0.02 USDC) - Pre-sign Safety Firewall: one GREEN/REVIEW/BLOCK verdict fusing tx decode+sim, signature-drainer, address-risk, URL-phishing and token-safety. Call before signing anything.
@@ -144,7 +144,7 @@ Decode an unsigned transaction and know what it does BEFORE signing. Given a cha
 
 Pay-per-call address-risk and sanctions screening for agents. /risk returns a 0-100 risk score and a BLOCK/REVIEW/ALLOW verdict composed from OFAC sanctions, a curated taint set (mixer/hack/scam), and CyberWareX's own DeFi Oracle scam/deployer ledger - a deployer-history signal no generic list has. /screen is the sanctions/taint-only compliance check. Deterministic, keyless, no LLM.
 
-**Use when:** Call it before paying or interacting with an address - screens for OFAC sanctions and scam-taint so your agent doesn't touch dirty funds.
+**Use when:** Call it before paying or interacting with an address: screens for OFAC sanctions and scam-taint so your agent doesn't touch dirty funds.
 
 - Base URL: `https://sanctions.cyberwarex.com`
 - `GET /risk` ($0.005 USDC) - Full address-risk score + BLOCK/REVIEW/ALLOW verdict from sanctions, taint, and our scam/deployer ledger.
@@ -168,19 +168,5 @@ Pay-per-call global weather (keyless, open-meteo.com; met.no fallback): current 
 - OpenAPI: https://weather.cyberwarex.com/openapi.json
 - Example: `curl -H 'X-Free-Trial: 1' 'https://weather.cyberwarex.com/current?place=Los%20Angeles&air=1'`
 
-### Agent Council
-
-Pay-per-call council of AI models for agents that need a judgement call rather than a lookup. Your question goes to 3 or 4 DIFFERENT models (deepseek, gpt-oss, glm, nemotron); each answers independently, and in deep mode each then sees the others and revises. A chair returns one verdict with confidence, the points every seat agreed on, the dissent that held, and what would flip the answer. Use it when one model's opinion is not enough: is this safe, is this worth it, which option. Typical answer in 5-7 seconds. No account, no API key. The grounded tier (/grounded) spends on real evidence first: it scans your question for a contract address, URL or $TICKER, buys the matching checks (honeypot sim, sanctions, page content, SEC profile), and one analyst returns a verdict that rests on what was found, with the source list and spend ledger included.
-
-**Use when:** Call it when the next step is a judgement call rather than a fact: whether to trust something, which of two options to take, whether a deal or a risk is worth it. You get several independent models' verdict plus where they disagreed, instead of one model's guess. Use /grounded when the decision turns on facts we can go and buy: a contract address, a link, a ticker.
-
-- Base URL: `https://council.cyberwarex.com`
-- `GET+POST /council` ($0.01 USDC) - Quick council: 3 models, 1 round -> verdict, confidence, consensus, dissent, watch_for
-- `GET+POST /council-deep` ($0.03 USDC) - Deep council: 4 models, 2 rounds (each seat sees the others and revises) -> a verdict that survived cross-examination
-- `GET+POST /grounded` ($0.05 USDC) - Grounded council: priced per request ($0.05-$0.12). We buy the evidence first (honeypot sim, sanctions screen, page content, SEC profile), then one analyst judges on what came back; the response lists every source and what we spent. Measured equal to the 4-model panel on evidence-rich questions, and about 6x faster. GET it unpaid to see the quote first. Needs a contract address, URL or $TICKER in the question: with nothing to check it returns 503 and charges nothing.
-- Free trial: 1 call(s)/day per IP (header `X-Free-Trial: 1`)
-- OpenAPI: https://council.cyberwarex.com/openapi.json
-- Example: `curl -H 'X-Free-Trial: 1' 'https://council.cyberwarex.com/council?q=Is%20a%203-day-old%20pool%20paying%2042%25%20APY%20with%20an%20unverified%20proxy%20admin%20safe%3F'`
-
 ---
-_Generated from `agents.json` on 2026-10-19. Source of truth: https://cyberwarex.com/agents.json_
+_Generated from `agents.json` on 2026-11-04. Source of truth: https://cyberwarex.com/agents.json_
