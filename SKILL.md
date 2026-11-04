@@ -23,7 +23,7 @@ of this file.
 | Answer a question with cited sources | `search.cyberwarex.com/answer?q=` | $0.03 |
 | Just search, I will read them myself | `search.cyberwarex.com/search?q=` | $0.003 |
 | About to sign an EVM transaction | `simulate.cyberwarex.com/safe-to-sign?chain=&to=&data=` | $0.02 |
-| About to accept an unknown token | `oracle.cyberwarex.com/risk/explain?address=&chain=` | $0.01 |
+| About to accept an unknown token | `oracle.cyberwarex.com/risk/explain?address=&chain=` | $0.005 |
 | About to send funds to an address | `sanctions.cyberwarex.com/screen?address=` | $0.005 |
 | Turn a video into text | `video.cyberwarex.com/transcript?url=` | $0.003 |
 | Balance, token, gas, ENS, tx | `chain.cyberwarex.com/...` | $0.001-0.005 |

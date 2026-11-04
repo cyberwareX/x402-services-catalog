@@ -16,7 +16,7 @@ START HERE: https://cyberwarex.com/assets/SKILL.md maps a problem to the one end
 - Before you sign an EVM transaction
   curl 'https://simulate.cyberwarex.com/safe-to-sign?chain=base&to=0xTOKEN&data=0xCALLDATA'   # $0.02, one verdict
 - Before you accept an unknown token as payment
-  curl 'https://oracle.cyberwarex.com/risk/explain?address=0xTOKEN&chain=base'   # $0.01 ALLOW/LIMIT/BLOCK
+  curl 'https://oracle.cyberwarex.com/risk/explain?address=0xTOKEN&chain=base'   # $0.005 ALLOW/LIMIT/BLOCK
 - Before you send funds to an address
   curl 'https://sanctions.cyberwarex.com/screen?address=0xADDR'   # $0.005 OFAC + taint
 - Read a page an HTTP GET cannot read
