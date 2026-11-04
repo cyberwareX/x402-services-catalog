@@ -81,7 +81,7 @@ Pay-per-call EVM chain data for AI agents: wallet balances, token profiles with 
 - `GET /erc20-balance` ($0.001 USDC) - ERC-20 balance (USDC by default, any token) with symbol + decimals
 - `GET /wallet` ($0.003 USDC) - Wallet snapshot: native + USDC balance, tx count, contract-or-EOA, USD values
 - `GET /token` ($0.004 USDC) - ERC-20 profile: on-chain metadata + live DEX price, liquidity, 24h volume
-- `GET /price` ($0.002 USDC) - Spot USD price for a ticker, CoinGecko id, or token address
+- `GET /price` ($0.001 USDC) - Spot USD price for a ticker, CoinGecko id, or token address
 - `GET /gas` ($0.002 USDC) - Live gas market: base fee, priority-fee percentiles, estimated USD cost
 - `GET /tx` ($0.003 USDC) - Transaction lookup + decode, including ERC-20 transfers
 - `GET /ens` ($0.003 USDC) - ENS resolution both directions (name to address, address to name)

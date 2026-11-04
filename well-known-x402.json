@@ -32,7 +32,7 @@
     "auth": "none",
     "note": "One hosted MCP endpoint for the whole suite: initialize / tools/list / tools/call. An unpaid tools/call returns that tool's x402 invoice; pay and retry with x_payment."
   },
-  "generated_at": 1793769157,
+  "generated_at": 1793769995,
   "service_count": 8,
   "services": [
     {
@@ -337,7 +337,7 @@
         {
           "path": "/price",
           "method": "GET",
-          "price_usdc": 0.002,
+          "price_usdc": 0.001,
           "desc": "Spot USD price for a ticker, CoinGecko id, or token address"
         },
         {

@@ -24,7 +24,7 @@
     "x402_version": 2,
     "note": "Unpaid call returns HTTP 402 with an x402 price quote; sign the USDC EIP-3009 authorization and retry with the X-PAYMENT header. Gasless for the payer."
   },
-  "generated_at": 1793769157,
+  "generated_at": 1793769995,
   "tool_count": 8,
   "tools": [
     {
@@ -323,7 +323,7 @@
         {
           "path": "/price",
           "method": "GET",
-          "price_usdc": 0.002,
+          "price_usdc": 0.001,
           "desc": "Spot USD price for a ticker, CoinGecko id, or token address"
         },
         {
