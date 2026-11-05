@@ -32,7 +32,7 @@
     "auth": "none",
     "note": "One hosted MCP endpoint for the whole suite: initialize / tools/list / tools/call. An unpaid tools/call returns that tool's x402 invoice; pay and retry with x_payment."
   },
-  "generated_at": 1793891571,
+  "generated_at": 1793895535,
   "service_count": 8,
   "services": [
     {
@@ -243,6 +243,12 @@
           "method": "GET",
           "price_usdc": 0.001,
           "desc": "Cheapest identity taster: feed an address or handle, get a one-line trust verdict"
+        },
+        {
+          "path": "/v1/age",
+          "method": "GET",
+          "price_usdc": 0.002,
+          "desc": "Account age for fresh-account and sybil filters: pass x=@handle, wallet=0x... or tg=<Telegram user id>; returns created_at and age_days (exact for X and wallets, an estimate with a range for Telegram). Not charged when nothing is found"
         },
         {
           "path": "/v1/holders/quote",

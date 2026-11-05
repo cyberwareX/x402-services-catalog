@@ -24,7 +24,7 @@
     "x402_version": 2,
     "note": "Unpaid call returns HTTP 402 with an x402 price quote; sign the USDC EIP-3009 authorization and retry with the X-PAYMENT header. Gasless for the payer."
   },
-  "generated_at": 1793891571,
+  "generated_at": 1793895535,
   "tool_count": 8,
   "tools": [
     {
@@ -230,6 +230,12 @@
           "method": "GET",
           "price_usdc": 0.001,
           "desc": "Cheapest identity taster: feed an address or handle, get a one-line trust verdict"
+        },
+        {
+          "path": "/v1/age",
+          "method": "GET",
+          "price_usdc": 0.002,
+          "desc": "Account age for fresh-account and sybil filters: pass x=@handle, wallet=0x... or tg=<Telegram user id>; returns created_at and age_days (exact for X and wallets, an estimate with a range for Telegram). Not charged when nothing is found"
         },
         {
           "path": "/v1/holders/quote",
