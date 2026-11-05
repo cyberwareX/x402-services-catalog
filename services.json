@@ -32,7 +32,7 @@
     "auth": "none",
     "note": "One hosted MCP endpoint for the whole suite: initialize / tools/list / tools/call. An unpaid tools/call returns that tool's x402 invoice; pay and retry with x_payment."
   },
-  "generated_at": 1793888456,
+  "generated_at": 1793888554,
   "service_count": 8,
   "services": [
     {
@@ -444,7 +444,7 @@
         {
           "path": "/search",
           "method": "GET",
-          "price_usdc": 0.003,
+          "price_usdc": 0.00435,
           "desc": "Web search: q, category (general|news|images), lang, max_results<=10",
           "example": {
             "q": "x402 protocol",

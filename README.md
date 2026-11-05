@@ -104,7 +104,7 @@ Keyless web search for AI agents: one metasearch query across major engines on a
 **Use when:** Call it whenever your agent needs fresh facts from the open web: one keyless query, clean JSON back, no search account to set up. Use /answer when you want ONE cited answer to a question instead of raw links - it searches, reads the top pages, and returns the answer with sources.
 
 - Base URL: `https://search.cyberwarex.com`
-- `GET /search` ($0.003 USDC) - Web search: q, category (general|news|images), lang, max_results<=10
+- `GET /search` ($0.00435 USDC) - Web search: q, category (general|news|images), lang, max_results<=10
 - `GET /contents` ($0.002 USDC) - Read one web page as clean markdown/text (JS rendered), truncate with max_chars
 - `GET /search-contents` ($0.006 USDC) - Web search with the page text of the top results already extracted (up to 5 pages, parallel)
 - `GET /news` ($0.001 USDC) - Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM

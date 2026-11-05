@@ -127,7 +127,7 @@ Do NOT use for: reading a full page (it returns results, not text) or anything o
 Cheapest route: /news is $0.001 and /search $0.00435. /search-contents ($0.006) and /answer ($0.03) bundle the page reads for you: cheaper than search plus several /fetch calls, more than you need if you only want links.
 Base URL: https://search.cyberwarex.com
 Measured, last 7 days: median 1.9 s, 95% of answers within 8.0 s, server errors 0.56% (353 answers on paid endpoints, free trials included).
-- GET /search  $0.003 USDC - Web search: q, category (general|news|images), lang, max_results<=10
+- GET /search  $0.00435 USDC - Web search: q, category (general|news|images), lang, max_results<=10
 - GET /contents  $0.002 USDC - Read one web page as clean markdown/text (JS rendered), truncate with max_chars
 - GET /search-contents  $0.006 USDC - Web search with the page text of the top results already extracted (up to 5 pages, parallel)
 - GET /news  $0.001 USDC - Ranked news brief for any topic: corroboration + freshness scored headlines, 15-min cache, zero-LLM
