@@ -19,9 +19,9 @@ Machine-readable, always-current versions (this repo mirrors them):
 
 ### Agent Web Access
 
-Web scraping API for AI agents: reliable eyes on the live web, the one thing an LLM can't do natively. Fetches JavaScript-rendered pages as clean, LLM-ready markdown, extracts elements by CSS selector, and captures full-page screenshots or PDFs of any public URL.
+Lets your agent read what it cannot see: any public web page as clean markdown (JavaScript included), screenshots and PDFs, public social profiles, company facts from a domain, and public Telegram: look up a channel or group, read its latest posts, find channels by topic, or check if one is real. Pay per call in USDC on Base, from $0.001; lookups that find nothing are not charged.
 
-**Use when:** Reach for it when your agent must read a page it was handed, scrape live data, screenshot a site for a report, or turn a URL into a PDF: any time the answer lives on a website the model can't see.
+**Use when:** Reach for it when the answer lives on a page or a public Telegram channel the model cannot open: read a URL it was handed, scrape live data, screenshot a site, find Telegram channels or groups for a topic, read what a channel posted, or check whether a channel's audience is real before your operator pays for an ad or joins a group.
 
 - Base URL: `https://web.cyberwarex.com`
 - `GET /fetch` ($0.001 USDC) - Render a page to markdown/text/html
@@ -29,6 +29,11 @@ Web scraping API for AI agents: reliable eyes on the live web, the one thing an 
 - `GET /screenshot` ($0.005 USDC) - Full-page PNG screenshot
 - `GET /pdf` ($0.005 USDC) - Render a page to PDF
 - `GET /ocr` ($0.005 USDC) - OCR: extract text from an image URL (screenshot/scan/receipt/photo) via Tesseract; SSRF-guarded, no charge on empty
+- `GET /telegram` ($0.005 USDC) - Telegram lookup: public @name or t.me link -> channel, group, bot or user with title, description, subscribers or members; posts=1 adds the latest public posts with date, views and text; q= searches inside a channel. Missing name = no charge
+- `GET /telegram/search` ($0.01 USDC) - Telegram search API: topic words -> up to 6 public channels, groups or bots, each with kind, title, description and subscriber count. Nothing found = no charge
+- `GET /telegram/check` ($0.01 USDC) - Is a Telegram channel or group real? Verdict alive, quiet, dead or looks inflated, with the public numbers behind it (posts per day, views vs subscribers, online share). Unreadable = no charge
+- `GET /social` ($0.005 USDC) - Public social profile reader for X, TikTok, Instagram, Facebook and LinkedIn: name, bio, followers and recent post links, each with its source. Nothing usable = no charge
+- `GET /company` ($0.005 USDC) - Company profile from a domain: registration date, mail setup (MX, SPF, DMARC), homepage title, social links, public emails and tech
 - MCP: Official MCP registry: io.github.CyberPunk11147/cyberwarex-web-access: tools: web_fetch, web_extract, web_screenshot, web_pdf (install via registry.modelcontextprotocol.io)
 - OpenAPI: https://web.cyberwarex.com/openapi.json
 - Example: `curl -i 'https://web.cyberwarex.com/fetch?url=https://example.com&format=markdown'`
@@ -169,4 +174,4 @@ Pay-per-call global weather (keyless, open-meteo.com; met.no fallback): current 
 - Example: `curl -H 'X-Free-Trial: 1' 'https://weather.cyberwarex.com/current?place=Los%20Angeles&air=1'`
 
 ---
-_Generated from `agents.json` on 2026-11-04. Source of truth: https://cyberwarex.com/agents.json_
+_Generated from `agents.json` on 2026-11-05. Source of truth: https://cyberwarex.com/agents.json_

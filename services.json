@@ -32,7 +32,7 @@
     "auth": "none",
     "note": "One hosted MCP endpoint for the whole suite: initialize / tools/list / tools/call. An unpaid tools/call returns that tool's x402 invoice; pay and retry with x_payment."
   },
-  "generated_at": 1793769995,
+  "generated_at": 1793888456,
   "service_count": 8,
   "services": [
     {
@@ -40,7 +40,7 @@
       "name": "Agent Web Access",
       "url": "https://web.cyberwarex.com",
       "category": "Web & Data",
-      "summary": "Web scraping API for AI agents: reliable eyes on the live web, the one thing an LLM can't do natively. Fetches JavaScript-rendered pages as clean, LLM-ready markdown, extracts elements by CSS selector, and captures full-page screenshots or PDFs of any public URL.",
+      "summary": "Lets your agent read what it cannot see: any public web page as clean markdown (JavaScript included), screenshots and PDFs, public social profiles, company facts from a domain, and public Telegram: look up a channel or group, read its latest posts, find channels by topic, or check if one is real. Pay per call in USDC on Base, from $0.001; lookups that find nothing are not charged.",
       "status": "live",
       "payment": {
         "protocol": "x402",
@@ -87,15 +87,60 @@
           "method": "GET",
           "price_usdc": 0.005,
           "desc": "OCR: extract text from an image URL (screenshot/scan/receipt/photo) via Tesseract; SSRF-guarded, no charge on empty"
+        },
+        {
+          "path": "/telegram",
+          "method": "GET",
+          "price_usdc": 0.005,
+          "desc": "Telegram lookup: public @name or t.me link -> channel, group, bot or user with title, description, subscribers or members; posts=1 adds the latest public posts with date, views and text; q= searches inside a channel. Missing name = no charge",
+          "example": {
+            "name": "durov"
+          }
+        },
+        {
+          "path": "/telegram/search",
+          "method": "GET",
+          "price_usdc": 0.01,
+          "desc": "Telegram search API: topic words -> up to 6 public channels, groups or bots, each with kind, title, description and subscriber count. Nothing found = no charge",
+          "example": {
+            "q": "solana developers"
+          }
+        },
+        {
+          "path": "/telegram/check",
+          "method": "GET",
+          "price_usdc": 0.01,
+          "desc": "Is a Telegram channel or group real? Verdict alive, quiet, dead or looks inflated, with the public numbers behind it (posts per day, views vs subscribers, online share). Unreadable = no charge",
+          "example": {
+            "name": "pythonres"
+          }
+        },
+        {
+          "path": "/social",
+          "method": "GET",
+          "price_usdc": 0.005,
+          "desc": "Public social profile reader for X, TikTok, Instagram, Facebook and LinkedIn: name, bio, followers and recent post links, each with its source. Nothing usable = no charge",
+          "example": {
+            "url": "https://x.com/vercel"
+          }
+        },
+        {
+          "path": "/company",
+          "method": "GET",
+          "price_usdc": 0.005,
+          "desc": "Company profile from a domain: registration date, mail setup (MX, SPF, DMARC), homepage title, social links, public emails and tech",
+          "example": {
+            "domain": "stripe.com"
+          }
         }
       ],
       "mcp": "Official MCP registry: io.github.CyberPunk11147/cyberwarex-web-access: tools: web_fetch, web_extract, web_screenshot, web_pdf (install via registry.modelcontextprotocol.io)",
-      "not_for": "searching (you must already know the URL); YouTube (use video-intel); judging whether a link is safe (use url-safety).",
+      "not_for": "general web search (use search); YouTube (use video-intel); private Telegram groups, member lists or anything behind a login: we only read what a logged-out visitor sees.",
       "cheaper_alternative": "/fetch and /extract are $0.001. Only pay $0.005 for /screenshot, /pdf or /ocr when you need pixels or scanned text, not when you need the words on the page.",
       "well_known": "https://web.cyberwarex.com/.well-known/x402",
       "openapi": "https://web.cyberwarex.com/openapi.json",
       "free_trial": null,
-      "use_when": "Reach for it when your agent must read a page it was handed, scrape live data, screenshot a site for a report, or turn a URL into a PDF: any time the answer lives on a website the model can't see.",
+      "use_when": "Reach for it when the answer lives on a page or a public Telegram channel the model cannot open: read a URL it was handed, scrape live data, screenshot a site, find Telegram channels or groups for a topic, read what a channel posted, or check whether a channel's audience is real before your operator pays for an ad or joins a group.",
       "example_request": "curl -i 'https://web.cyberwarex.com/fetch?url=https://example.com&format=markdown'"
     },
     {
@@ -460,7 +505,7 @@
       ],
       "mcp": null,
       "not_for": "reading a full page (it returns results, not text) or anything onchain.",
-      "cheaper_alternative": "/news is $0.001 and /search $0.003. /search-contents ($0.006) and /answer ($0.03) bundle the page reads for you: cheaper than search plus several /fetch calls, more than you need if you only want links.",
+      "cheaper_alternative": "/news is $0.001 and /search $0.00435. /search-contents ($0.006) and /answer ($0.03) bundle the page reads for you: cheaper than search plus several /fetch calls, more than you need if you only want links.",
       "well_known": "https://search.cyberwarex.com/.well-known/x402",
       "openapi": "https://search.cyberwarex.com/openapi.json",
       "free_trial": {
