@@ -13,6 +13,7 @@ Machine-readable, always-current versions (this repo mirrors them):
 
 - Protocol: **x402** (USDC on Base)
 - **No account, no API key.** An unpaid call returns HTTP 402 with a price quote; sign the USDC EIP-3009 authorization and retry with the `X-PAYMENT` header. Gasless for the payer.
+- **Callable from a web page.** Every service sends open CORS headers and exposes `PAYMENT-REQUIRED`, so a browser-based agent or demo page can read the price and pay cross-origin.
 - Contact: x402@cyberwarex.com
 
 ## Services (8)
@@ -175,4 +176,4 @@ Gives your agent the weather anywhere by place name or lat and lon: current cond
 - Example: `curl -H 'X-Free-Trial: 1' 'https://weather.cyberwarex.com/current?place=Los%20Angeles&air=1'`
 
 ---
-_Generated from `agents.json` on 2026-11-06. Source of truth: https://cyberwarex.com/agents.json_
+_Generated from `agents.json` on 2026-11-17. Source of truth: https://cyberwarex.com/agents.json_

@@ -29,6 +29,8 @@ L.append("")
 L.append(f"- Protocol: **x402** ({pay['asset']} on {pay.get('network_name', pay['network'])})")
 L.append("- **No account, no API key.** An unpaid call returns HTTP 402 with a price quote; sign the "
          "USDC EIP-3009 authorization and retry with the `X-PAYMENT` header. Gasless for the payer.")
+L.append("- **Callable from a web page.** Every service sends open CORS headers and exposes `PAYMENT-REQUIRED`, "
+         "so a browser-based agent or demo page can read the price and pay cross-origin.")
 L.append(f"- Contact: {org['contact']}")
 L.append("")
 L.append(f"## Services ({d['tool_count']})")
